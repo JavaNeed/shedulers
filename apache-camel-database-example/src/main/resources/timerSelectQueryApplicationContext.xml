@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+        
+    <context:property-placeholder location="classpath:database.properties"/>
+       
+    <bean id="orderProcessor" class="com.javarticles.camel.components.OrderProcessor"/>
+    
+	<jdbc:initialize-database data-source="dataSource" enabled="true">
+		<jdbc:script location="classpath:db-schema.sql" />
+		<jdbc:script location="classpath:db-test-data.sql" />
+	</jdbc:initialize-database>
+	
+	
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${mysql.driver.class.name}" />
+		<property name="url" value="${mysql.url}" />
+		<property name="username" value="${mysql.username}" />
+		<property name="password" value="${mysql.username}" />
+	</bean>
+	
+	<camelContext xmlns="http://camel.apache.org/schema/spring">
+		<route>
+			<from uri="timer://queryTimer?period=2s" />
+			<setBody>
+				<constant>
+					SELECT * FROM ORDERS WHERE STATUS='NEW' ORDER BY NAME
+				</constant>
+			</setBody>
+			<to uri="jdbc:dataSource" />
+			<split>
+				<simple>${body}</simple>
+				<to uri="bean:orderProcessor" />
+			</split>
+		</route>
+	</camelContext>
+	
+</beans>
