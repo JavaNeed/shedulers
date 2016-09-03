@@ -1,0 +1,62 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xmlns:repository="http://www.springframework.org/schema/data/repository"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+		http://www.springframework.org/schema/data/repository http://www.springframework.org/schema/data/repository/spring-repository.xsd">
+
+	<import resource="classpath:dataSourceContext.xml"/>
+	
+	<jpa:repositories base-package="com.mkyong.repository" />
+	<context:component-scan base-package="com.mkyong.*" />
+	<context:annotation-config />
+
+	<bean id="jobA" class="com.mkyong.job.JobA" />
+	<bean id="jobB" class="com.mkyong.job.JobB" />
+	<bean id="jobC" class="com.mkyong.job.JobC" />
+	<bean id="autowiredA" class="com.mkyong.job.JobASpringBeanJobFactory" />
+
+	<!-- ~~~~~~~~~ Quartz Job ~~~~~~~~~~ -->
+	<bean name="JobA" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="com.mkyong.job.JobA" />
+	</bean>
+
+	<bean name="JobB" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="com.mkyong.job.JobB" />
+	</bean>
+	
+	<bean name="JobC" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="com.mkyong.job.JobC" />
+	</bean>
+	
+	<!-- ~~~~~~~~~~~ Cron Trigger, run every 5 seconds ~~~~~~~~~~~~~ -->
+	<bean id="cronTriggerJobA" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="JobA" />
+		<property name="cronExpression" value="0/5 * * * * ?" />
+	</bean>
+	
+	<bean id="cronTriggerJobB" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="JobB" />
+		<property name="cronExpression" value="0/5 * * * * ?" />
+	</bean>
+	
+	<bean id="cronTriggerJobC" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="JobC" />
+		<property name="cronExpression" value="0/5 * * * * ?" />
+	</bean>
+
+	<!-- ~~~~~~~~~~~~~~~~  Scheduler bean Factory   ~~~~~~~~~~~~~~~~ -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+	<property name="jobFactory" ref="autowiredA"/> 
+		<property name="triggers">
+			<list>
+				<ref bean="cronTriggerJobA" />
+				<!-- <ref bean="cronTriggerJobB" />
+				<ref bean="cronTriggerJobC" /> -->
+			</list>
+		</property>
+	</bean>
+</beans>
