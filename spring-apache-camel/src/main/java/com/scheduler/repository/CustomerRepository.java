@@ -17,4 +17,5 @@ public interface CustomerRepository extends JpaRepository<Customer, Long>{
 	
 	@Query(value = "SELECT c.* FROM customers c INNER JOIN orders o ON c.customerNumber=o.customerNumber WHERE c.city=:city", nativeQuery = true)
 	List<Customer> findByCustomerNumberByCityNative(@Param("city") String city);
+
 }
