@@ -21,6 +21,7 @@ public class CustomerCustomRepositoryImpl implements CustomerCustomRepository{
 	@PersistenceContext
 	private EntityManager em;
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Customer> findByCustomerNumberByCity(String city) {
 		StringBuilder sql = new StringBuilder("SELECT c.* FROM customers c INNER JOIN orders o "
@@ -37,7 +38,7 @@ public class CustomerCustomRepositoryImpl implements CustomerCustomRepository{
 		
 		List<Customer> customers = new ArrayList<>();
 		
-		List resultList = query.getResultList();
+		List<Object> resultList = query.getResultList();
 		
 		// check if result-set is empty
 		if (resultList != null && !resultList.isEmpty()) {

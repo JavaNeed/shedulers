@@ -59,4 +59,47 @@ public class CustomerTest {
 		System.out.println("Size of Customers : "+customers.size());
 	}
 
+	@Test
+	public void testfindByCustomerNumberByCityJPA(){
+		List<Customer> customers = customerRepository.findByCustomerNumberByCity("Nantes");
+		System.out.println("Size of Customers : "+customers.size());
+		for (Customer customer : customers) {
+			System.out.println("===================================================");
+			System.out.println("AddressLine 1  : "+customer.getAddressLine1());
+			System.out.println("AddressLine 2  : "+customer.getAddressLine2());
+			System.out.println("City           : "+customer.getCity());
+			System.out.println("First Name     : "+customer.getContactFirstName());
+			System.out.println("Last Name      : "+customer.getContactLastName());
+			System.out.println("Country        : "+customer.getCountry());
+			System.out.println("Credit Limit   : "+customer.getCreditLimit());
+			System.out.println("CustomerName   : "+customer.getCustomerName());
+			System.out.println("Phone          : "+customer.getPhone());
+			System.out.println("Postal Code    : "+customer.getPostalCode());
+			System.out.println("State          : "+customer.getState());
+			System.out.println("Employee No    : "+customer.getEmployee().getEmployeeNumber());
+			System.out.println("Order No       : "+customer.getOrders().get(0).getOrderNumber());
+		}
+	}
+	
+	@Test
+	public void testfindByCustomerNumberByCityNative(){
+		List<Customer> customers = customerRepository.findByCustomerNumberByCityNative("Nantes");
+		System.out.println("Size of Customers : "+customers.size());
+		for (Customer customer : customers) {
+			System.out.println("---------------------------------");
+			System.out.println("AddressLine 1  : "+customer.getAddressLine1());
+			System.out.println("AddressLine 2  : "+customer.getAddressLine2());
+			System.out.println("City           : "+customer.getCity());
+			System.out.println("First Name     : "+customer.getContactFirstName());
+			System.out.println("Last Name      : "+customer.getContactLastName());
+			System.out.println("Country        : "+customer.getCountry());
+			System.out.println("Credit Limit   : "+customer.getCreditLimit());
+			System.out.println("CustomerName   : "+customer.getCustomerName());
+			System.out.println("Phone          : "+customer.getPhone());
+			System.out.println("Postal Code    : "+customer.getPostalCode());
+			System.out.println("State          : "+customer.getState());
+			System.out.println("Employee No    : "+customer.getEmployee().getEmployeeNumber());
+			System.out.println("Order No       : "+customer.getOrders().get(0).getOrderNumber());
+		}
+	}
 }
