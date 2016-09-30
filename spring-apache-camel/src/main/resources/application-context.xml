@@ -10,7 +10,7 @@
 	<import resource="apache-camel.xml" />
 	<import resource="database-context.xml"/>
 	
-	<bean id="camelScheduler" class="com.scheduler.schedule.CamelScheduler" />
+	<!-- <bean id="camelScheduler" class="com.scheduler.schedule.CamelScheduler" /> -->  <!-- STOP TO RUN THIS -->
 
 	<!-- Beans for CustomRepository classes -->	
 	<bean id="customCustomerRepo" class="com.scheduler.customRepository.CustomerCustomRepositoryImpl" />

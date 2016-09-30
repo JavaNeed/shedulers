@@ -23,6 +23,7 @@ public class CamelScheduler extends RouteBuilder{
 
 			@Override
 			public void process(Exchange exchange) throws Exception {
+				System.out.println("~~~~~~~~~ Scheduler for Customer Repository is Running ~~~~~~~~~~~~`");
 				List<Customer> customers = customerRepository.findAll();
 				System.out.println("Size Of Customers : "+customers.size());
 			}
